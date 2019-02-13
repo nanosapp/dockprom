@@ -5,11 +5,10 @@ networks:
     driver: bridge
 
 volumes:
-    prometheus_data: {}
-    grafana_data: {}
+  prometheus_data: {}
+  grafana_data: {}
 
 services:
-
   prometheus:
     image: prom/prometheus:v2.6.0
     container_name: prometheus
@@ -29,7 +28,7 @@ services:
     networks:
       - monitor-net
     labels:
-      org.label-schema.group: "monitoring"
+      org.label-schema.group: 'monitoring'
 
   alertmanager:
     image: prom/alertmanager:v0.15.3
@@ -39,13 +38,14 @@ services:
     command:
       - '--config.file=/etc/alertmanager/config.yml'
       - '--storage.path=/alertmanager'
+      - '--web.external-url=http://nanosads.io:9093'
     restart: unless-stopped
     expose:
       - 9093
     networks:
       - monitor-net
     labels:
-      org.label-schema.group: "monitoring"
+      org.label-schema.group: 'monitoring'
 
   nodeexporter:
     image: prom/node-exporter:v0.17.0
@@ -66,7 +66,7 @@ services:
     networks:
       - monitor-net
     labels:
-      org.label-schema.group: "monitoring"
+      org.label-schema.group: 'monitoring'
 
   cadvisor:
     image: google/cadvisor:v0.32.0
@@ -83,7 +83,7 @@ services:
     networks:
       - monitor-net
     labels:
-      org.label-schema.group: "monitoring"
+      org.label-schema.group: 'monitoring'
 
   grafana:
     image: grafana/grafana:5.4.2
@@ -104,7 +104,7 @@ services:
     networks:
       - monitor-net
     labels:
-      org.label-schema.group: "monitoring"
+      org.label-schema.group: 'monitoring'
 
   pushgateway:
     image: prom/pushgateway:v0.7.0
@@ -115,16 +115,16 @@ services:
     networks:
       - monitor-net
     labels:
-      org.label-schema.group: "monitoring"
+      org.label-schema.group: 'monitoring'
 
   caddy:
     image: stefanprodan/caddy
     container_name: caddy
     ports:
-      - "3000:3000"
-      - "9090:9090"
-      - "9093:9093"
-      - "9091:9091"
+      - '3000:3000'
+      - '9090:9090'
+      - '9093:9093'
+      - '9091:9091'
     volumes:
       - ./caddy/:/etc/caddy/
     environment:
@@ -134,4 +134,4 @@ services:
     networks:
       - monitor-net
     labels:
-      org.label-schema.group: "monitoring"
+      org.label-schema.group: 'monitoring'
